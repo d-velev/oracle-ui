@@ -1,20 +1,20 @@
 <template>
-  <div id="oracles">
+  <div id="responses">
     <ae-label id="ae-label">
-      <strong>Available oracles</strong>
+      <strong>Oracle responses</strong>
     </ae-label>
-    <div v-for="oracle in oracles">
+    <div v-for="response in responses">
       <ae-panel :ratioTop="1" :ratioBottom="1">
         <div id="hash">
-          <strong> Address: </strong>{{oracle.body.data.sender}}
+          <strong> Oracle address: </strong>{{response.body.data.sender}}
         </div>
         <ae-divider/>
         <div>
-          <strong> Query format: </strong>{{oracle.body.data.payload.query_format}}
+          <strong> Query ID: </strong>{{response.body.data.payload.query_id}}
         </div>
         <ae-divider/>
         <div>
-          <strong> Response format: </strong>{{oracle.body.data.payload.response_format}}
+          <strong> Response: </strong>{{response.body.data.payload.response}}
         </div>
       </ae-panel>
     </div>
@@ -25,32 +25,24 @@
   import {AeLabel, AePanel, AeDivider} from '@aeternity/aepp-components'
 
   let phoenix = require('phoenix-js')
-  let axios = require('axios');
-  axios.defaults.timeout = 20000;
 
   export default {
-    name: 'RegisteredOracles',
+    name: 'OracleResponses',
     components: {
       AeLabel, AePanel, AeDivider
     },
     data () {
       return {
-        oracles: []
+        responses: []
       }
     },
     mounted () {
       let socket = new phoenix.Socket('ws://localhost:4000/socket')
       let channel = socket.channel('room:notifications')
 
-
-
       socket.connect()
 
-      channel.on('new_mined_oracle_register_tx:ak$8AE9di2BBRNSUi1k7FQhKP3BvGSbb7ggnvqZFpqd9Fm6jxhsWn', msg => this.oracles.push(msg))
-      channel.on('new_mined_oracle_query_tx:ak$8AE9di2BBRNSUi1k7FQhKP3BvGSbb7ggnvqZFpqd9Fm6jxhsWn', msg =>
-        axios.get('http://localhost:4000/temperature/' + msg.body.data.payload.query_data.city).then(function (response) {
-               axios.post(`http://localhost:4000/oracle_response`, {"query_id": msg.id, "fee": 10, "response": response})}
-         ))
+      channel.on('new_mined_oracle_response_tx:ak$8AE9di2BBRNSUi1k7FQhKP3BvGSbb7ggnvqZFpqd9Fm6jxhsWn', msg => this.responses.push(msg))
 
       channel.join()
       .receive('ok', ({messages}) => console.log('Successful join', messages))
@@ -61,7 +53,7 @@
 </script>
 
 <style>
-  #oracles {
+  #responses {
     border: 2px solid #f03c6e;
     padding: 16px;
     margin: 8px;

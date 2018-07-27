@@ -3,6 +3,7 @@
     <ae-main id="main">
       <registered-oracles></registered-oracles>
       <oracle-query></oracle-query>
+      <oracle-responses></oracle-responses>
     </ae-main>
   </div>
 </template>
@@ -10,6 +11,7 @@
 <script>
 import RegisteredOracles from './components/RegisteredOracles'
 import OracleQuery from './components/OracleQuery.vue'
+import OracleResponses from './components/OracleResponses.vue'
 import {AeMain} from '@aeternity/aepp-components'
 
 export default {
@@ -17,6 +19,7 @@ export default {
   components: {
     RegisteredOracles,
     OracleQuery,
+    OracleResponses,
     AeMain
   }
 }
