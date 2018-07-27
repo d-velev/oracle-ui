@@ -1,0 +1,17 @@
+qr = %{"properties" => %{"city" => %{"type" => "string"}}, "type" => "object"} 
+rsp = %{
+  "properties" => %{
+    "location" => %{
+      "temperature" => %{"type" => "number"},
+      "timestamp" => %{"type" => "number"},
+      "type" => "string"
+    }
+  },
+  "type" => "object"
+}
+
+
+Oracle.register(qr, rsp, 9, 10, %{ttl: 10, type: :relative})
+            
+
+Oracle.query(<<2, 185, 113, 22, 239, 144, 38, 209, 196, 52, 186, 159, 234, 208,    57, 99, 232, 0, 64, 53, 248, 244, 85, 80, 249, 161, 139, 99, 244, 10, 22,          146, 189>>, %{"city" => "sofia"}, 10, 10, %{ttl: 5, type: :relative}, %{ttl: 7, type: :relative})
